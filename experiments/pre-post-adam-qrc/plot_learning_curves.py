@@ -24,11 +24,15 @@ COLORS = {
     'dqn': 'black',
     'qrc-preadam': 'tab:blue',
     'qrc-postadam': 'tab:orange',
+    'qrc-target': 'tab:purple',
+    'qrc-layernorm': 'tab:green',
 }
 LABELS = {
     'dqn': 'DQN',
     'qrc-preadam': 'QRC (Pre-Adam)',
     'qrc-postadam': 'QRC (Post-Adam)',
+    'qrc-target': 'QRC (Pre-Adam) + Target Net',
+    'qrc-layernorm': 'QRC (Pre-Adam) + Layer Norm',
 }
 
 results = LazyResultCollection(Model=ExperimentModel, metrics=['steps', 'return'])
