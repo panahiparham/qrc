@@ -1,0 +1,25 @@
+[project]
+name = "qrc"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "jax>=0.4.0",
+    "dm-haiku>=0.0.10",
+    "optax>=0.1.0",
+    "chex>=0.1.5",
+    "numpy>=1.24.0",
+    "gymnasium>=0.26.0",
+    "matplotlib",
+    "PyExpUtils-andnp~=8.0",
+    "RlGlue-andnp~=2.0",
+    "ReplayTables-andnp~=7.0",
+    "RlEvaluation~=1.0",
+    "PyExpPlotting-andnp",
+    "pyarrow>=24.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.uv]
+package = false
