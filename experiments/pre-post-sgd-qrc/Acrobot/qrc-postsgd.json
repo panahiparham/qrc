@@ -1,0 +1,26 @@
+{
+    "agent": "QRCPostAdam",
+    "problem": "Acrobot",
+    "total_steps": 100000,
+    "episode_cutoff": 500,
+    "metaParameters": {
+        "epsilon": 0.1,
+        "buffer_type": "iid",
+
+        "buffer_size": 10000,
+        "batch": 64,
+
+        "beta": 1.0,
+        "eta": 1.0,
+
+        "optimizer": {
+            "name": "SGD",
+            "learning_rate": 0.001
+        },
+
+        "representation": {
+            "type": "TwoLayerRelu",
+            "hidden": 64
+        }
+    }
+}

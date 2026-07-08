@@ -1,0 +1,27 @@
+{
+    "agent": "DQN",
+    "problem": "MountainCar",
+    "total_steps": 100000,
+    "episode_cutoff": 1000,
+    "metaParameters": {
+        "epsilon": 0.1,
+        "buffer_type": "iid",
+
+        "buffer_size": 10000,
+        "batch": 64,
+
+        "target_refresh": 128,
+
+
+
+        "optimizer": {
+            "name": "SGD",
+            "learning_rate": 0.001
+        },
+
+        "representation": {
+            "type": "TwoLayerRelu",
+            "hidden": 64
+        }
+    }
+}

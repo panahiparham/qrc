@@ -8,7 +8,7 @@ from typing import Any, Dict, Tuple
 from PyExpUtils.collection.Collector import Collector
 from ReplayTables.ReplayBuffer import Timestep
 from ..buffers.registry import getBufferBuilder
-from ..optimizers.registry import getOptimizerBuilder
+from ..optimizers.registry import buildOptimizer
 
 from algorithms.BaseAgent import BaseAgent
 from representations.networks import NetworkBuilder
@@ -49,8 +49,7 @@ class NNAgent(BaseAgent):
         # -- Optimizer --
         # ---------------
 
-        opt = getOptimizerBuilder(self.optimizer_params['name'])
-        self.optimizer = opt(**{k: v for k, v in self.optimizer_params.items() if k != 'name'})
+        self.optimizer = buildOptimizer(self.optimizer_params)
         opt_state = self.optimizer.init(net_params)
 
         # ------------------
