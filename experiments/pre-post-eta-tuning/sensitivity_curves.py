@@ -20,14 +20,13 @@ setDefaultConference('jmlr')
 PLOTS_DIR = os.path.join(os.path.dirname(__file__), 'plots')
 
 COLORS = {
-    'dqn': 'black',
-    'qrc': 'tab:blue',
-    'qrc-target': 'tab:purple',
+    'qrc-preadam': 'tab:blue',
+    'qrc-postadam': 'tab:orange',
 }
+
 LABELS = {
-    'dqn': 'DQN',
-    'qrc': 'QRC',
-    'qrc-target': 'QRC + Target Net',
+    'qrc-preadam': 'QRC (Pre-Adam)',
+    'qrc-postadam': 'QRC (Post-Adam)',
 }
 
 results = LazyResultCollection(Model=ExperimentModel, metrics=['steps', 'return'])
@@ -57,7 +56,7 @@ for env, sub_results in results.groupby_directory(level=2):
 
         perfs = []
 
-        for (eta,), sub_df in df.group_by('optimizer.learning_rate'):
+        for (eta,), sub_df in df.group_by('eta'):
             report = Hypers.select_best_hypers(
                 sub_df,
                 metric='step_weighted_return',
@@ -116,7 +115,7 @@ for env, sub_results in results.groupby_directory(level=2):
         ax.spines['right'].set_visible(False)
         ax.set_xlabel('H-head Learning Rate Multiplier (eta)')
         # ax.set_xticks([2 ** -i for i in range(14, 3, -1)])
-        ax.set_xscale('log', base=2)
+        # ax.set_xscale('log', base=2)
         ax.set_ylabel('Average Lifetime Return')
         ax.set_title(env)
         ax.legend(loc='upper right')
