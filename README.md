@@ -23,3 +23,5 @@ Finally plot the results with:
 ```bash
 uv run experiments/pre-post-adam-qrc/plot_learning_curves.py
 ```
+
+The `experiments/pre-post-sgd-qrc` experiment is identical except the agents use SGD instead of Adam; run and plot it by swapping the experiment directory in the commands above.
