@@ -26,3 +26,5 @@ test.json
 *.tar.bz2
 
 *_bu/
+
+**/*.png

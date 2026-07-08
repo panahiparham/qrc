@@ -12,15 +12,16 @@ import numpy as np
 import haiku as hk
 import jax.numpy as jnp
 
-tree_leaves = jax.tree_util.tree_leaves
+tree_map = jax.tree_util.tree_map
 
 
-class QRC(NNAgent):
+class QRCPostAdam(NNAgent):
     def __init__(self, observations: Tuple, actions: int, params: Dict, collector: Collector, seed: int):
         super().__init__(observations, actions, params, collector, seed)
 
         self.beta = params.get('beta', 1.)
         self.eta = params.get('eta', 1.0)
+        self.stepsize = self.optimizer_params['learning_rate']
 
         self.epsilon_decay_steps = params.get('epsilon_decay_steps', 0)
         self.min_epsilon = params.get('min_epsilon', 1.0)
@@ -79,6 +80,18 @@ class QRC(NNAgent):
         grad, metrics = grad_fn(state.params, batch)
 
         updates, optim = self.optimizer.update(grad, state.optim, state.params)
+
+        # Post-Adam decoupled weight decay on h-params only.
+        # Applied after Adam transforms the gradient so beta is not absorbed
+        # into Adam's moment estimates (unlike the L2 term in QRC._loss).
+        decay = tree_map(
+            lambda h, dh: dh - self.stepsize * self.beta * h,
+            state.params['h'],
+            updates['h'],
+        )
+        updates = dict(updates)
+        updates['h'] = decay
+
         params = optax.apply_updates(state.params, updates)
 
         new_state = AgentState(
@@ -97,7 +110,6 @@ class QRC(NNAgent):
         qp = self.q(params, phi_p)
 
         q_loss, h_loss, metrics = qc_loss(q, batch.a, batch.r, batch.gamma, qp, h)
-        regularizer = sum(jnp.sum(jnp.square(p)) for p in jax.tree_util.tree_leaves(params['h']))
 
         v_loss = jnp.mean(q_loss)
         h_loss_mean = jnp.mean(h_loss)
@@ -107,7 +119,8 @@ class QRC(NNAgent):
             'h_loss': h_loss_mean,
         }
 
-        return v_loss + self.eta * (h_loss_mean + self.beta * regularizer), metrics
+        # No L2 term — regularization is handled post-Adam in _computeUpdate
+        return v_loss + self.eta * h_loss_mean, metrics
 
 
 # ---------------
