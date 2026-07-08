@@ -4,6 +4,7 @@ from algorithms.BaseAgent import BaseAgent
 from algorithms.nn.DQN import DQN
 from algorithms.nn.QRC import QRC
 from algorithms.nn.QRCPostAdam import QRCPostAdam
+from algorithms.nn.QRCTarget import QRCTarget
 
 
 def getAgent(name: str) -> Type[BaseAgent]:
@@ -13,4 +14,6 @@ def getAgent(name: str) -> Type[BaseAgent]:
         return QRC
     if name == 'QRCPostAdam':
         return QRCPostAdam
+    if name == 'QRCTarget':
+        return QRCTarget
     raise ValueError(f'Unknown algorithm: {name}')
