@@ -1,0 +1,29 @@
+{
+    "agent": "QRC",
+    "problem": "MountainCar",
+    "total_steps": 100000,
+    "episode_cutoff": 1000,
+    "metaParameters": {
+        "epsilon": 0.1,
+        "buffer_type": "iid",
+
+        "buffer_size": 10000,
+        "batch": 64,
+
+        "beta": 1.0,
+        "eta": 1.0,
+
+        "optimizer": {
+            "name": "ADAM",
+            "learning_rate": [0.0625, 0.03125, 0.015625, 0.0078125, 0.00390625, 0.001953125, 0.0009765625, 0.00048828125, 0.000244140625, 0.0001220703125, 0.00006103515625],
+            "b1": 0.9,
+            "b2": 0.999,
+            "eps": 1e-8
+        },
+
+        "representation": {
+            "type": "TwoLayerReluLayerNorm",
+            "hidden": 64
+        }
+    }
+}

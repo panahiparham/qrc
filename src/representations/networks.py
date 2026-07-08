@@ -75,6 +75,18 @@ def reluLayers(layers: List[int], name: Optional[str] = None):
 
     return out
 
+def layerNormReluLayers(layers: List[int], name: Optional[str] = None):
+    w_init = hk.initializers.Orthogonal(np.sqrt(2))
+    b_init = hk.initializers.Constant(0)
+
+    out = []
+    for width in layers:
+        out.append(hk.Linear(width, w_init=w_init, b_init=b_init, name=name))
+        out.append(hk.LayerNorm(axis=-1, create_scale=False, create_offset=False))
+        out.append(jax.nn.relu)
+
+    return out
+
 def buildFeatureNetwork(inputs: Tuple, params: Dict[str, Any], rng: Any):
     def _inner(x: jax.Array):
         name = params['type']
@@ -82,6 +94,9 @@ def buildFeatureNetwork(inputs: Tuple, params: Dict[str, Any], rng: Any):
 
         if name == 'TwoLayerRelu':
             layers = reluLayers([hidden, hidden], name='phi')
+
+        elif name == 'TwoLayerReluLayerNorm':
+            layers = layerNormReluLayers([hidden, hidden], name='phi')
 
         elif name == 'OneLayerRelu':
             layers = reluLayers([hidden], name='phi')
